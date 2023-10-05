@@ -48,10 +48,10 @@ try:
         result_dict["word"].append(word)
         result_dict["html_result"].append(html_result)
 finally:
-    # Close the WebDriver
-    driver.close()
     result_df = pd.DataFrame(result_dict)
     result_df.to_csv(os.path.join(current_dir, "..", "data", "result.csv"))
+    # Close the WebDriver
+    driver.quit()
 
 
 
