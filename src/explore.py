@@ -5,6 +5,16 @@ from selenium.webdriver.chrome.options import Options
 
 current_dir = os.path.realpath(os.path.dirname(__file__))
 
+def set_chrome_options():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_prefs = {}
+    chrome_options.experimental_options["prefs"] = chrome_prefs
+    chrome_prefs["profile.default_content_settings"] = {"images": 2}
+    return chrome_options
+
 df = pd.read_csv(os.path.join(current_dir, "..", "data","cleaned_rows.csv"))
 
 # List of words to look up
@@ -15,13 +25,8 @@ result_dict = {}
 result_dict["word"] = []
 result_dict["html_result"] = []
 
-chrome_options = Options()
-chrome_options.add_argument("--disable-extensions")
-chrome_options.add_argument('-headless')
-chrome_options.add_argument("--disable-popup-blocking")
-
 # Set up the Selenium WebDriver (make sure to specify the path to your webdriver executable)
-driver = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Chrome(options=set_chrome_options())
 
 
 # Loop through the word list and perform lookups
@@ -44,7 +49,7 @@ try:
         result_dict["html_result"].append(html_result)
 finally:
     # Close the WebDriver
-    driver.quit()
+    driver.close()
     result_df = pd.DataFrame(result_dict)
     result_df.to_csv(os.path.join(current_dir, "..", "data", "result.csv"))
 
