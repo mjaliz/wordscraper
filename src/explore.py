@@ -26,9 +26,10 @@ driver = webdriver.Chrome(options=chrome_options)
 
 # Loop through the word list and perform lookups
 try:
-    for word in word_list[:5]:
+    for i, word in enumerate(word_list):
         # Construct the URL of the dictionary website (replace with the actual URL)
         # Replace with the actual URL
+        print(f"Getting word number {i} : {word}")
         url = f'https://dictionary.cambridge.org/dictionary/essential-american-english/{word}'
         driver.get(url)
 
