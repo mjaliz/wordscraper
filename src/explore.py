@@ -58,6 +58,6 @@ finally:
                      "data", f"result-{start_index}.csv"))
 
     with open(os.path.join(data_dir, "word_index_start.txt"), "w") as f:
-        f.write(str(i))
+        f.write(str(i + start_index))
     # Close the WebDriver
     driver.quit()
