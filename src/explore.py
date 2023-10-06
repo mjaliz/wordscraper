@@ -33,7 +33,7 @@ driver = webdriver.Chrome(options=set_chrome_options())
 
 with open(os.path.join(data_dir, "word_index_start.txt"), "r") as f:
     start_index = int(f.read())
-
+print(start_index)
 # Loop through the word list and perform lookups
 try:
     for i, word in enumerate(word_list[start_index:]):
