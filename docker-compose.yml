@@ -10,3 +10,4 @@ services:
       - ./:/app
     working_dir: /app
     command: python3 /app/src/explore.py
+    restart: always

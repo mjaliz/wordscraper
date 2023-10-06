@@ -4,6 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 current_dir = os.path.realpath(os.path.dirname(__file__))
+data_dir = os.path.join(current_dir, "..", "data")
+
 
 def set_chrome_options():
     chrome_options = Options()
@@ -15,7 +17,8 @@ def set_chrome_options():
     chrome_prefs["profile.default_content_settings"] = {"images": 2}
     return chrome_options
 
-df = pd.read_csv(os.path.join(current_dir, "..", "data","cleaned_rows.csv"))
+
+df = pd.read_csv(os.path.join(current_dir, "..", "data", "cleaned_rows.csv"))
 
 # List of words to look up
 word_list = list(df["0"])  # Add your list of words here
@@ -28,10 +31,12 @@ result_dict["html_result"] = []
 # Set up the Selenium WebDriver (make sure to specify the path to your webdriver executable)
 driver = webdriver.Chrome(options=set_chrome_options())
 
+with open(os.path.join(data_dir, "word_index_start.txt"), "r") as f:
+    start_index = int(f.read())
 
 # Loop through the word list and perform lookups
 try:
-    for i, word in enumerate(word_list):
+    for i, word in enumerate(word_list[start_index:]):
         # Construct the URL of the dictionary website (replace with the actual URL)
         # Replace with the actual URL
         print(f"Getting word number {i} : {word}")
@@ -49,10 +54,10 @@ try:
         result_dict["html_result"].append(html_result)
 finally:
     result_df = pd.DataFrame(result_dict)
-    result_df.to_csv(os.path.join(current_dir, "..", "data", "result.csv"))
+    result_df.to_csv(os.path.join(current_dir, "..",
+                     "data", f"result-{start_index}.csv"))
+
+    with open(os.path.join(data_dir, "word_index_start.txt"), "w") as f:
+        f.write(str(i))
     # Close the WebDriver
     driver.quit()
-
-
-
-
